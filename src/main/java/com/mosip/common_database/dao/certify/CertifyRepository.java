@@ -1,9 +1,9 @@
-package com.mosip.common_database.repository;
+package com.mosip.common_database.dao.certify;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mosip.common_database.entity.CertifyEntity;
+import com.mosip.common_database.entity.certify.CertifyEntity;
 
 @Repository
 public interface CertifyRepository extends JpaRepository<CertifyEntity, Long>{

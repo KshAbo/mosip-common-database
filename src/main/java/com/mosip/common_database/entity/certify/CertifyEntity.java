@@ -1,4 +1,4 @@
-package com.mosip.common_database.entity;
+package com.mosip.common_database.entity.certify;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
