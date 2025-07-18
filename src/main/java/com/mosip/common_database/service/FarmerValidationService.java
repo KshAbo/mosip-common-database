@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,15 @@ import jakarta.annotation.PostConstruct;
 @Component("farmer")
 public class FarmerValidationService implements ValidationService{
 
-        private Set<String> requiredFields;
-    private Map<String, Pattern> fieldRegex;
+    private final VerifyFieldService verifyFieldService;
+
+    public FarmerValidationService(VerifyFieldService verifyFieldService) {
+        this.verifyFieldService = verifyFieldService;
+    }
+
+    private Set<String> requiredFields;
+
+    private Map<String, Object> fields;
 
     private Map<String, Object> readConfig(InputStream in) {
         ObjectMapper mapper = new ObjectMapper();
@@ -36,9 +42,8 @@ public class FarmerValidationService implements ValidationService{
 
     @PostConstruct
     private void loadConfig() {
-        
-        try {
 
+        try {
             InputStream in = getClass().getClassLoader().getResourceAsStream("validation/farmer.json");
             if (in == null) {
                 throw new RuntimeException("Config file not found: validation/farmer.json");
@@ -47,33 +52,25 @@ public class FarmerValidationService implements ValidationService{
 
             requiredFields = new HashSet<>((List<String>) config.get("required"));
 
-            fieldRegex = new HashMap<>();
-            Map<String, String> patterns = (Map<String, String>) config.get("regex");
-            for(Map.Entry<String, String> entry : patterns.entrySet()){
-                fieldRegex.put(entry.getKey(), Pattern.compile(entry.getValue()));
+            fields = new HashMap<>();
+            Map<String, Object> f = (Map<String, Object>) config.get("fields");
+            for (Map.Entry<String, Object> entry : f.entrySet()) {
+                fields.put(entry.getKey(), entry.getValue());
             }
+
         } catch (Exception e) {
-            System.out.println("ERROR: Given file is empty or invalid");
-            throw new RuntimeException("Failed to load config for FarmerValidationService", e);
+            throw new RuntimeException("Failed to load config for CertifyValidationService", e);
         }
+
 
     }
 
     @Override
     public void validate(Map<String, Object> data){
 
-        for(String field : requiredFields){
-            if(!data.containsKey(field)){
-                throw new IllegalArgumentException("Missing required field: " + field);
-            }
-        }
-
-        for(Map.Entry<String, Pattern> entry : fieldRegex.entrySet()) {
-            Object value = data.get(entry.getKey());
-            if (value != null && !entry.getValue().matcher(value.toString()).matches()) {
-                throw new IllegalArgumentException("Field '" + entry.getKey() + "' does not match pattern");
-            }
-        }
+        System.out.println("Called from FarmerValidationService");
+        verifyFieldService.verifyRequired(data, requiredFields);
+        verifyFieldService.verify(data, fields);
 
         System.out.println("FarmerValidationService: Validation Passed!");
     }

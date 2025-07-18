@@ -1,8 +1,28 @@
 {
-    "required": ["name", "email", "phone_number"],
-    "regex": {
-        "name": "^[A-Za-z\\s]{3,50}$",
-        "email": "^[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,}$",
-        "phone_number": "^[0-9]{10}$"
-    }
+    "fields": {
+        "uuid": {
+            "type": "integer"
+        },
+        "address": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 50
+        },
+        "email": {
+            "type": "string",
+            "regex": "^[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,}$"
+        },
+        "phoneNumber": {
+            "type": "string",
+            "regex": "^[0-9]{10}$"
+        }
+    },
+    "required": [
+        "name",
+        "email",
+        "phoneNumber"
+    ]
 }
