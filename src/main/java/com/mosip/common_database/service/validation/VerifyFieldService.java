@@ -1,4 +1,4 @@
-package com.mosip.common_database.service;
+package com.mosip.common_database.service.validation;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class VerifyFieldService {
     
-
-
 
     public void verifyRequired(Map<String, Object> data, Set<String> required_fields) {
         for (String field : required_fields) {

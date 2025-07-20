@@ -1,4 +1,4 @@
-package com.mosip.common_database.dao.certify;
+package com.mosip.common_database.repository.certify;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

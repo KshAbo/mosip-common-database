@@ -1,4 +1,4 @@
-package com.mosip.common_database.service;
+package com.mosip.common_database.service.validation;
 
 public enum ValidationType {
 

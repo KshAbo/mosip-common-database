@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mosip.common_database.service.ValidationService;
+import com.mosip.common_database.service.repository.RepositoryService;
+import com.mosip.common_database.service.validation.ValidationService;
 
 import lombok.AllArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 public class DataController {
 
     private final Map<String, ValidationService> validationServices;
+    private final Map<String, RepositoryService> repositoryServices;
 
     @GetMapping("/api/data/retrieve/{id}")
     public String retrieveDataById(String id) {
@@ -34,13 +36,15 @@ public class DataController {
         @RequestHeader(name = "x-source") String dataSource,
         @RequestBody Map<String, Object> data) 
     {
-        ValidationService validationService = validationServices.get(dataSource);
-
+        ValidationService validationService = validationServices.get(dataSource + "ValidationService");
+        RepositoryService repositoryService = repositoryServices.get(dataSource + "RepositoryService");
+        
         if(validationService == null){
             return ResponseEntity.badRequest().body("Unknown data source: " + dataSource);
         }
 
         validationService.validate(data);
+        repositoryService.save(data);
         return ResponseEntity.ok().build();
     }
 

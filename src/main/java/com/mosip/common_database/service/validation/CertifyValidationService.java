@@ -1,4 +1,4 @@
-package com.mosip.common_database.service;
+package com.mosip.common_database.service.validation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.PostConstruct;
 
-@Component("certify")
+@Service("certifyValidationService")
 public class CertifyValidationService implements ValidationService{
 
     private final VerifyFieldService verifyFieldService;
@@ -68,8 +68,10 @@ public class CertifyValidationService implements ValidationService{
     public void validate(Map<String, Object> data){
 
         System.out.println("Called from CertifyValidationService");
+
         verifyFieldService.verifyRequired(data, requiredFields);
         verifyFieldService.verify(data, fields);
+
 
         System.out.println("CertifyValidationService: Validation Passed!");
     }

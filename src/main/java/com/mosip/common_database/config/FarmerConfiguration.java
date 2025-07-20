@@ -19,7 +19,7 @@ import jakarta.persistence.EntityManagerFactory;
 @Configuration
 @PropertySource({ "classpath:database.properties" })
 @EnableJpaRepositories(
-basePackages="com.mosip.common_database.dao.farmer",
+basePackages="com.mosip.common_database.repository.farmer",
 entityManagerFactoryRef="farmerEntityManager",
 transactionManagerRef="farmerTransactionManager")
 public class FarmerConfiguration {

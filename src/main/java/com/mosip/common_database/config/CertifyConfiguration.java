@@ -20,7 +20,7 @@ import jakarta.persistence.EntityManagerFactory;
 @Configuration
 @PropertySource({"classpath:database.properties"})
 @EnableJpaRepositories(
-    basePackages="com.mosip.common_database.dao.certify",
+    basePackages="com.mosip.common_database.repository.certify",
     entityManagerFactoryRef="certifyEntityManager",
     transactionManagerRef="certifyTransactionManager")
 public class CertifyConfiguration {

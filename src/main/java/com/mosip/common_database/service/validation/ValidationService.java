@@ -1,4 +1,4 @@
-package com.mosip.common_database.service;
+package com.mosip.common_database.service.validation;
 
 import java.util.Map;
 
