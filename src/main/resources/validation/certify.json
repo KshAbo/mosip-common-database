@@ -4,7 +4,13 @@
             "type": "integer"
         },
         "address": {
-            "type": "string"
+            "type": "string",
+            "conditional": ["pinCode"]
+        },
+        "pinCode": {
+            "type": "integer",
+            "minLength": 100000,
+            "maxLength": 999999
         },
         "name": {
             "type": "string",
@@ -22,7 +28,6 @@
     },
     "required": [
         "name",
-        "email",
         "phoneNumber"
     ]
 }

@@ -23,6 +23,9 @@ public class CertifyEntity {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "pin_code")
+    private Integer pinCode;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 

@@ -11,6 +11,8 @@ public class CertifyDto {
 
     private String address;
 
+    private Integer pinCode;
+
     private String phoneNumber;
 
     private String email;

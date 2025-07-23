@@ -146,9 +146,16 @@ public class VerifyFieldService {
 
     }
 
-    // TODO: Make verifyConditional and verifyUniqueness
+    // TODO: Make verifyUniqueness
 
-    public void verifyConditional() {
+    public void verifyConditional(Map.Entry<String, Object> data, Set<String> data_keys, List<String> conditionals) {
+
+        for(String conditional : conditionals){
+            if(!data_keys.contains(conditional)){
+                throw new IllegalArgumentException("Field '" + data.getKey() + "' requires field(s)'" + conditionals + "'");
+            }
+        }
+
         System.out.println("Conditional verified");
     }
 
@@ -173,6 +180,7 @@ public class VerifyFieldService {
 
             Map<String, Object> field_params = (Map<String, Object>) fields.get(data_field.getKey());
 
+            try {
             for (Map.Entry<String, Object> field_param : field_params.entrySet()) {
 
                 // Debugging
@@ -185,14 +193,16 @@ public class VerifyFieldService {
                     case REGEX -> verifyFormat(data_field, field_param.getValue().toString());
                     case MINLENGTH -> verifyLength(data_field, (Integer) field_param.getValue(), LengthConstraintType.MIN);
                     case MAXLENGTH -> verifyLength(data_field, (Integer) field_param.getValue(), LengthConstraintType.MAX);
-                    case CONDITIONAL -> verifyConditional();
+                    case CONDITIONAL -> verifyConditional(data_field, data.keySet(), (List<String>) field_param.getValue());
                     case UNIQUE -> verifyUniqueness();
-                    case REQUIRED -> {
-                    }
+                    // Do nothing as this has to be handled with parameters different from whats provided in function verify, so it will be called before calling verify
+                    case REQUIRED -> {}
                 }
 
             }
             System.out.println();
+        } catch (IllegalArgumentException e){
+        }
 
 
         }

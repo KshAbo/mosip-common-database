@@ -1,5 +1,1 @@
-1. In Map<String, Object>, whats, the String key here? is it the data source? a unique identifier?
-
 2. For the GET request at /api/data/query, what would the body look like? If its a json object, should we look through all the database and give all matching matches?
-
-3. How should the configuration files look like? can it be a yml file? json file?
