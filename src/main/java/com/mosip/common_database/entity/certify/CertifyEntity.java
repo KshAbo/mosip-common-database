@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(schema = "certify")
+@Table(name = "certify_entity" ,schema = "certify")
 @Data
 public class CertifyEntity {
 

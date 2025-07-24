@@ -40,7 +40,6 @@ public class FarmerValidationService implements ValidationService{
         }
     }
 
-    @PostConstruct
     private void loadConfig() {
 
         try {
@@ -68,6 +67,7 @@ public class FarmerValidationService implements ValidationService{
     @Override
     public void validate(Map<String, Object> data){
 
+        loadConfig();
         System.out.println("Called from FarmerValidationService");
 
         verifyFieldService.verifyRequired(data, requiredFields);

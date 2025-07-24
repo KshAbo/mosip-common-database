@@ -1,6 +1,7 @@
 package com.mosip.common_database.service.repository;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,18 @@ public class CertifyRepositoryService implements RepositoryService {
 
         return certifyMapper.toMap(certifyDto);
 
+    }
+
+    @Override
+    public Optional<Map<String, Object>> getById(Long id) {
+
+        Optional<CertifyEntity> certify = certifyRepository.findById(id);
+        return certify
+            .map(entity -> {
+                CertifyDto certifyDto = certifyMapper.toDto(entity);
+                return certifyMapper.toMap(certifyDto);
+            });
+                               
     }
 
 }

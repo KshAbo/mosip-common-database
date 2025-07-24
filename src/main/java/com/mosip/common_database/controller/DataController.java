@@ -1,7 +1,11 @@
 package com.mosip.common_database.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +27,21 @@ public class DataController {
     private final Map<String, RepositoryService> repositoryServices;
 
     @GetMapping("/api/data/retrieve/{id}")
-    public String retrieveDataById(@PathVariable("id") String id) {
-        return "hello";
+    public ResponseEntity<?> retrieveDataById(@PathVariable("id") Long id) {
+
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        System.out.println(repositoryServices.entrySet());
+        for(Map.Entry<String, RepositoryService> repository : repositoryServices.entrySet()){
+
+            Optional<Map<String, Object>> entity = repository.getValue().getById(id);
+            System.out.println("Called from DataController: " + entity);
+            entity.ifPresent(object -> result.addLast(object));
+
+        }
+        System.out.println(result);
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/api/data/query")
@@ -44,9 +61,17 @@ public class DataController {
             return ResponseEntity.badRequest().body("Unknown data source: " + dataSource);
         }
 
-        validationService.validate(data);
-        repositoryService.save(data);
-        return ResponseEntity.ok().build();
+        try{
+
+            validationService.validate(data);
+            repositoryService.save(data);
+            return ResponseEntity.ok().build();
+
+        }catch (IllegalArgumentException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("VALIDATION ERROR:: '" + e.getMessage() + "'");
+
+        }
     }
 
 }

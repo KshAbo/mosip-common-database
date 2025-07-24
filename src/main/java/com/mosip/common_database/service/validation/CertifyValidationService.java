@@ -40,7 +40,6 @@ public class CertifyValidationService implements ValidationService{
         }
     }
 
-    @PostConstruct
     private void loadConfig() {
         
         try {
@@ -67,6 +66,7 @@ public class CertifyValidationService implements ValidationService{
     @Override
     public void validate(Map<String, Object> data){
 
+        loadConfig();
         System.out.println("Called from CertifyValidationService");
 
         verifyFieldService.verifyRequired(data, requiredFields);

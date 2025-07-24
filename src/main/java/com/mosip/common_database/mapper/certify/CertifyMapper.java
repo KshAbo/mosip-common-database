@@ -1,11 +1,11 @@
 package com.mosip.common_database.mapper.certify;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.ObjectFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mosip.common_database.dto.certify.CertifyDto;
 import com.mosip.common_database.entity.certify.CertifyEntity;
 import com.mosip.common_database.mapper.MappingUtils;
@@ -15,14 +15,14 @@ public interface CertifyMapper {
 
     CertifyDto toDto(Map<String, Object> certifyMapObject);
 
+    CertifyDto toDto(CertifyEntity certifyMapObject);
+
     CertifyEntity toEntity(CertifyDto certifyDto);
 
-    Map<String, Object> toMap(CertifyDto certifyDto);
-
-
-    @ObjectFactory
-    default Map<String, Object> createMap() {
-        return new HashMap<>();
+    default Map<String, Object> toMap(CertifyDto certifyDto) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> map = objectMapper.convertValue(certifyDto, new TypeReference<>() {});
+        return map;
     }
 
 }

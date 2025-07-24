@@ -151,7 +151,10 @@ public class VerifyFieldService {
     public void verifyConditional(Map.Entry<String, Object> data, Set<String> data_keys, List<String> conditionals) {
 
         for(String conditional : conditionals){
+            System.out.println(data_keys);
+            System.out.println(data_keys.contains(conditional));
             if(!data_keys.contains(conditional)){
+                System.out.println(conditional);
                 throw new IllegalArgumentException("Field '" + data.getKey() + "' requires field(s)'" + conditionals + "'");
             }
         }
@@ -202,6 +205,7 @@ public class VerifyFieldService {
             }
             System.out.println();
         } catch (IllegalArgumentException e){
+            throw e;
         }
 
 

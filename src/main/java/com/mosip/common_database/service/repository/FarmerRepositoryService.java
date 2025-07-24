@@ -1,6 +1,7 @@
 package com.mosip.common_database.service.repository;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,18 @@ public class FarmerRepositoryService implements RepositoryService {
         farmerRepository.save(farmerEntity);
 
         return farmerMapper.toMap(farmerDto);
+    }
+
+    @Override
+    public Optional<Map<String, Object>> getById(Long id) {
+
+        Optional<FarmerEntity> farmer = farmerRepository.findById(id);
+        return farmer
+            .map(entity -> {
+                FarmerDto farmerDto = farmerMapper.toDto(entity);
+                return farmerMapper.toMap(farmerDto);
+            });
+                               
     }
 
 }
