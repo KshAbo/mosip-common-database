@@ -1,15 +1,18 @@
 package com.mosip.common_database.service.repository;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface RepositoryService {
+import org.springframework.data.jpa.domain.Specification;
+
+public interface RepositoryService<T> {
 
     public Map<String, Object> save(Map<String, Object> obj);
 
-    Optional<Map<String, Object>> getById(Long id);
-
-    // void deleteById(Long id);
+    public Optional<Map<String, Object>> getById(Long id);
+    
+    public List<Map<String, Object>> getBySearchCriteria(Specification<T> spec);
 
 }

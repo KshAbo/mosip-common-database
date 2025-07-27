@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mosip.common_database.service.query.SearchCriteria;
+import com.mosip.common_database.service.query.SearchDto;
+import com.mosip.common_database.service.query.SpecificationBuilder;
 import com.mosip.common_database.service.repository.RepositoryService;
 import com.mosip.common_database.service.validation.ValidationService;
 
@@ -35,18 +38,45 @@ public class DataController {
         for(Map.Entry<String, RepositoryService> repository : repositoryServices.entrySet()){
 
             Optional<Map<String, Object>> entity = repository.getValue().getById(id);
-            System.out.println("Called from DataController: " + entity);
+            // System.out.println("Called from DataController: " + entity);
             entity.ifPresent(object -> result.addLast(object));
 
         }
-        System.out.println(result);
+        // System.out.println(result);
 
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/api/data/query")
-    public String retrieveDataByQuery(String id) {
-        return "hello";
+    public ResponseEntity<?> retrieveDataByQuery(@RequestBody SearchDto params) {
+        List<Map<String, Object>> result = new ArrayList<>();
+            SpecificationBuilder<?> builder = new SpecificationBuilder<>();
+            List<SearchCriteria> criteriaList = params.getSearchCriteria();
+            if (criteriaList != null) {
+                criteriaList.forEach(x -> {
+                    x.setDataOption(params
+                            .getDataOption());
+                    builder.with(x);
+                });
+            }
+
+            // System.out.println("params:: " + params);
+            // System.out.println("criteriaList:: " + criteriaList);
+            // System.out.println("Builder:: " + builder);
+            // System.out.println("Built:: " + builder.build());
+
+
+            for(Map.Entry<String, RepositoryService> repo : repositoryServices.entrySet()){
+                try{
+                    // System.out.println(repo.getKey() + " " + repo.getValue());
+                    result.addAll(repo.getValue().getBySearchCriteria(builder.build()));
+                } catch (Exception e){
+                    System.err.println("Search failed for repository "+repo.getKey() +": " + e.getMessage());
+                }
+            }
+
+        return ResponseEntity.ok(result);
+
     }
 
     @PostMapping("/api/data/ingest")

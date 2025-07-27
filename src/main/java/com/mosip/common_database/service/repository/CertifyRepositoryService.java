@@ -1,8 +1,11 @@
 package com.mosip.common_database.service.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.mosip.common_database.dto.certify.CertifyDto;
@@ -14,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @Service("certifyRepositoryService")
 @AllArgsConstructor
-public class CertifyRepositoryService implements RepositoryService {
+public class CertifyRepositoryService implements RepositoryService<CertifyEntity> {
 
     private final CertifyRepository certifyRepository;
     private final CertifyMapper certifyMapper;
@@ -42,5 +45,17 @@ public class CertifyRepositoryService implements RepositoryService {
             });
                                
     }
+
+    @Override
+    public List<Map<String, Object>> getBySearchCriteria(Specification<CertifyEntity> spec) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        certifyRepository.findAll(spec).forEach((certifyEntity) -> {
+            CertifyDto certifyDto = certifyMapper.toDto(certifyEntity);
+            Map<String, Object> obj = certifyMapper.toMap(certifyDto);
+            result.add(obj);
+        });
+        return result;
+    }
+
 
 }

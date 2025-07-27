@@ -1,8 +1,11 @@
 package com.mosip.common_database.service.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.mosip.common_database.dto.farmer.FarmerDto;
@@ -14,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @Service("farmerRepositoryService")
 @AllArgsConstructor
-public class FarmerRepositoryService implements RepositoryService {
+public class FarmerRepositoryService implements RepositoryService<FarmerEntity> {
 
     private final FarmerRepository farmerRepository;
     private final FarmerMapper farmerMapper;
@@ -38,7 +41,16 @@ public class FarmerRepositoryService implements RepositoryService {
                 FarmerDto farmerDto = farmerMapper.toDto(entity);
                 return farmerMapper.toMap(farmerDto);
             });
-                               
     }
 
+    @Override
+    public List<Map<String, Object>> getBySearchCriteria(Specification<FarmerEntity> spec) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        farmerRepository.findAll(spec).forEach((certifyEntity) -> {
+            FarmerDto farmerDto = farmerMapper.toDto(certifyEntity);
+            Map<String, Object> obj = farmerMapper.toMap(farmerDto);
+            result.add(obj);
+        });
+        return result;
+    }
 }
