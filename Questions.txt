@@ -1,1 +1,0 @@
-2. For the GET request at /api/data/query, what would the body look like? If its a json object, should we look through all the database and give all matching matches?

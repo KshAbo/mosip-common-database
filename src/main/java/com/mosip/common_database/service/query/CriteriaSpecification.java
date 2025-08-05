@@ -47,6 +47,31 @@ public class CriteriaSpecification<T> implements Specification<T>{
                     return cb.like(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + castedValue + "%");
                 }
                 break;
+            case DOES_NOT_CONTAIN:
+                if (fieldType.equals(String.class)) {
+                    return cb.notLike(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + castedValue + "%");
+                }
+                break;
+            case BEGINS_WITH:
+                if (fieldType.equals(String.class)) {
+                    return cb.like(cb.lower(root.get(searchCriteria.getFilterKey())), castedValue + "%");
+                }
+                break;
+            case DOES_NOT_BEGIN_WITH:
+                if (fieldType.equals(String.class)) {
+                    return cb.notLike(cb.lower(root.get(searchCriteria.getFilterKey())), castedValue + "%");
+                }
+                break;
+            case ENDS_WITH:
+                if (fieldType.equals(String.class)) {
+                    return cb.like(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + castedValue);
+                }
+                break;
+            case DOES_NOT_END_WITH:
+                if (fieldType.equals(String.class)) {
+                    return cb.notLike(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + castedValue);
+                }
+                break;
             case EQUAL:
                 return cb.equal(root.get(searchCriteria.getFilterKey()), castedValue);
 
