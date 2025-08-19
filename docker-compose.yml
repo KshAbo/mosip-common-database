@@ -2,7 +2,7 @@ services:
 
   db:
     image: postgres
-    container_name: common_database
+    container_name: inji_usecase
     ports: 
      - "5432:5432"
     restart: always 

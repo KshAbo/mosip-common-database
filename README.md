@@ -24,8 +24,8 @@ ProjectDir
 │   │   ├── java
 │   │   │   └── com
 │   │   │       └── mosip
-│   │   │           └── common_database
-│   │   │               ├── CommonDatabaseApplication.java
+│   │   │           └── inji_usecase
+│   │   │               ├── InjiApplication.java
 │   │   │               ├── config
 │   │   │               │   ├── CertifyConfiguration.java
 │   │   │               │   └── FarmerConfiguration.java
@@ -79,14 +79,14 @@ ProjectDir
 │   │           └── farmer.json
 ```
 The project mostly follows Java Spring Boot structure.
-The implementation for GET /api/data/query is found in ```/src/main/java/com/mosip/common_database/service/query```
+The implementation for GET /api/data/query is found in ```/src/main/java/com/mosip/inji_usecase/service/query```
 The configuration files for various services can be found under ```/src/main/resources/validation```
 
 ## Endpoints
 ### ```POST /api/data/ingest```
 The requests sent at ```POST /api/data/ingest``` goes through validation layer before being saved. The endpoint receives a JSON object in the BODY with a custom HEADER ```x-source``` that tells clarifies which service it came from. Currently it accepts ```certify``` and ```farmer```.  
 Validation is handled by ValidationService which maps it to the correct validation service, whether Certify or Farmer based on the source.  
-The implementation for validation is found under ```/src/main/java/com/mosip/common_database/service/validation/```. Config file for the respective service must be under ```/src/main/resources/validation```  
+The implementation for validation is found under ```/src/main/java/com/mosip/inji_usecase/service/validation/```. Config file for the respective service must be under ```/src/main/resources/validation```  
 After validation is passed with no errors, it will then be saved by the respective RepositoryService which will save it to the correct database, based on the ```x-source```
 The various validation parameters that can be used in the configuration file are:
 ```
@@ -101,7 +101,7 @@ The various validation parameters that can be used in the configuration file are
 
 ### ```GET /api/data/retrieve/{id}```
 The requests sent at ```GET /api/data/retrieve/{id}``` will go through every database thats been configured and look up at the ID for each table. If multiple matching IDs are found in each database, then it will return a list of Map<String, Object> as response. If none is found, an empty list is returned.  
-The implementation for the look up is under ```/src/main/java/com/mosip/common_database/service/repository/```
+The implementation for the look up is under ```/src/main/java/com/mosip/inji_usecase/service/repository/```
 
 ### ```GET /api/data/query```
 Reference used: https://medium.com/@cmmapada/advanced-search-and-filtering-using-spring-data-jpa-specification-and-criteria-api-b6e8f891f2bf
@@ -147,7 +147,7 @@ Valid dataOptions are:
 all
 any
 ```
-The implementation for GET /api/data/query is found in ```/src/main/java/com/mosip/common_database/service/query```
+The implementation for GET /api/data/query is found in ```/src/main/java/com/mosip/inji_usecase/service/query```
 
 ## Demo Video
 
