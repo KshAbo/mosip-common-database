@@ -1,14 +1,17 @@
-This project implements Jira Ticket https://mosip.atlassian.net/browse/INJIMOB-3320
+This project implements Jira Ticket [INJIMOB-3320](https://mosip.atlassian.net/browse/INJIMOB-3320)
 
 ### Overview
 A common Spring Boot service that can dynamically accept, validate, store, and retrieve JSON (Map<String, Object>) payloads so that all use-cases can reuse the same service and store dynamic data structures in a PostgreSQL DB with validation and flexible schema mapping.
+
+## Running the application locally
+1. Pull the repository locally to your system
+2. Run the command `docker-compose up` to start the databases
+3. Run the command `./mvwn spring-boot:run` to start the application
 
 ## Project Structure
 
 ```
 ProjectDir
-├── back
-│   └── 1-init.sql
 ├── docker-compose.yml
 ├── HELP.md
 ├── init
@@ -18,7 +21,6 @@ ProjectDir
 ├── mvnw
 ├── mvnw.cmd
 ├── pom.xml
-├── Questions.txt
 ├── src
 │   ├── main
 │   │   ├── java
@@ -149,6 +151,81 @@ any
 ```
 The implementation for GET /api/data/query is found in ```/src/main/java/com/mosip/inji_usecase/service/query```
 
+## Adding an Use-case
+2 example use-cases have been implemented in this application, namely Certify and Farmer
+If you want to add your own use case, please reference the implementation of the example use-cases in the relevant folders
+The following files, folders have to modified/added for adding an use-case
+```
+├── init
+|   ├── 1-init.sql                                                    --Add your database creation here
+|   ├── 2-certify-schema.sql
+|   ├── 3-farmer-schema.sql
+|   └── 4-example-schema.sql                                          --Add your schema here
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── mosip
+│   │   │           └── inji_usecase
+│   │   │               ├── config
+│   │   │               │   ├── CertifyConfiguration.java
+│   │   │               │   ├── FarmerConfiguration.java
+|   |   |                   └── ExampleConfiguration.java             --Add your configuration here
+│   │   │               ├── dto
+│   │   │               │   ├── certify
+│   │   │               │   │   └── CertifyDto.java
+│   │   │               │   ├── farmer
+│   │   │               │   |   └── FarmerDto.java
+│   │   │               │   └── example                                --Add your dto here
+│   │   │               │       └── ExampleDto.java
+│   │   │               ├── entity
+│   │   │               │   ├── certify
+│   │   │               │   │   └── CertifyEntity.java
+│   │   │               │   ├── farmer
+│   │   │               │   │   └── FarmerEntity.java
+│   │   │               │   └── example                                --Add your entity here
+│   │   │               │       └── ExampleEntity.java
+│   │   │               ├── mapper
+│   │   │               │   ├── certify
+│   │   │               │   │   └── CertifyMapper.java
+│   │   │               │   ├── farmer
+│   │   │               │   │   └── FarmerMapper.java
+│   │   │               │   ├── example                                --Add your mapper here
+│   │   │               │   │   └── ExampleMapper.java
+│   │   │               │   └── MappingUtils.java
+│   │   │               ├── repository
+│   │   │               │   ├── certify
+│   │   │               │   │   └── CertifyRepository.java
+│   │   │               │   ├── farmer
+│   │   │               │   │   └── FarmerRepository.java
+│   │   │               │   └── example                                --Add your repository here
+│   │   │               │       └── ExampleRepository.java
+│   │   │               └── service
+│   │   │                   ├── query
+│   │   │                   ├── repository
+│   │   │                   │   ├── CertifyRepositoryService.java
+│   │   │                   │   ├── FarmerRepositoryService.java
+│   │   │                   │   ├── ExampleRepositoryService.java        --Add your repository service here
+│   │   │                   │   └── RepositoryService.java
+│   │   │                   └── validation
+│   │   │                       ├── CertifyValidationService.java
+│   │   │                       ├── FarmerValidationService.java
+│   │   │                       ├── ExampleValidationService.java        --Add your validation service here
+│   │   │                       ├── ValidationService.java
+│   │   │                       ├── ValidationType.java
+│   │   │                       └── VerifyFieldService.java
+│   │   └── resources
+│   │       ├── application.properties
+│   │       ├── database.properties                                    --Add your database url here
+│   │       ├── static
+│   │       ├── templates
+│   │       └── validation
+│   │           ├── certify.json
+│   │           ├── farmer.json
+│   │           └── example.json                                        --Add your validtion configuration here
+                      
+```
+
 ## Demo Video
 
 
@@ -156,7 +233,7 @@ https://github.com/user-attachments/assets/dda1043a-676e-4bbc-bc3f-599f7c17b21f
 
 
 ## Subtasks
-- [ ] Data Ingestion
+- [x] Data Ingestion
     - [x] POST request at /api/data/ingest 
     - [x] Dynamic input acceptance
 - [ ] Data Validation
@@ -167,14 +244,14 @@ https://github.com/user-attachments/assets/dda1043a-676e-4bbc-bc3f-599f7c17b21f
     - [x] Conditional validation
     - [ ] Uniqueness validation
     - [x] Validation Feedback
-- [ ] Data Retrieval
+- [x] Data Retrieval
     - [x] Data Retrieval at endpoint GET /api/data/retrieve/{id} 
     - [x] Data Retrieval at endpoint GET /api/data/retrieve/query
 - [ ] Data Storage
     - [x] Dynamic Database Routing based on source
     - [ ] Dynamic Database Routing based on specific field's value, or round-robin for load balancing
     - [x] Flexible Data Mapping
-- [ ] Management and Administration
+- [x] Management and Administration
     - [x] Health Check endpoint GET /actuator/health to indicate operational status and connectivity to configured databases
 - [ ] Non-Functional Requirements
     - [ ] System must handle atleast 100 concurrent ingestion requests without degradation
